@@ -35,6 +35,11 @@ Gunakan Makefile untuk menjalankan perintah:
 - `GET /api/peminjaman/{id}`
 - `PUT /api/peminjaman/{id}`
 - `DELETE /api/peminjaman/{id}`
+- `POST /api/pembayaran`
+- `GET /api/pembayaran`
+- `GET /api/pembayaran/{id}`
+- `GET /api/peminjaman/{id}/pembayaran`
+- `DELETE /api/pembayaran/{id}`
 
 Detail request/response lihat di `REQUIREMENTS.md`.
 

@@ -27,11 +27,16 @@ func main() {
 	}
 	defer pool.Close()
 
-	repo := repository.NewPeminjamanPGX(pool)
-	uc := usecase.NewPeminjamanUsecase(repo)
-	h := handler.NewPeminjamanHandler(uc)
+	peminjamanRepo := repository.NewPeminjamanPGX(pool)
+	pembayaranRepo := repository.NewPembayaranPGX(pool)
 
-	mux := route.NewRouter(h)
+	peminjamanUC := usecase.NewPeminjamanUsecase(peminjamanRepo)
+	pembayaranUC := usecase.NewPembayaranUsecase(pembayaranRepo, peminjamanRepo)
+
+	peminjamanHandler := handler.NewPeminjamanHandler(peminjamanUC)
+	pembayaranHandler := handler.NewPembayaranHandler(pembayaranUC)
+
+	mux := route.NewRouter(peminjamanHandler, pembayaranHandler)
 
 	server := &http.Server{
 		Addr:              cfg.ServerAddr,
