@@ -8,10 +8,14 @@ import (
 )
 
 func NewRouter(
+	anggotaHandler *handler.AnggotaHandler,
 	peminjamanHandler *handler.PeminjamanHandler,
 	pembayaranHandler *handler.PembayaranHandler,
 ) *http.ServeMux {
 	mux := http.NewServeMux()
+
+	mux.HandleFunc("/api/anggota", anggotaHandler.HandleCollection)
+	mux.HandleFunc("/api/anggota/", anggotaHandler.HandleItem)
 
 	mux.HandleFunc("/api/peminjaman", peminjamanHandler.HandleCollection)
 	mux.HandleFunc("/api/peminjaman/", func(w http.ResponseWriter, r *http.Request) {

@@ -30,6 +30,11 @@ Gunakan Makefile untuk menjalankan perintah:
 
 ## Endpoint
 
+- `POST /api/anggota`
+- `GET /api/anggota`
+- `GET /api/anggota/{id}`
+- `PUT /api/anggota/{id}`
+- `DELETE /api/anggota/{id}`
 - `POST /api/peminjaman`
 - `GET /api/peminjaman`
 - `GET /api/peminjaman/{id}`
@@ -38,6 +43,7 @@ Gunakan Makefile untuk menjalankan perintah:
 - `POST /api/pembayaran`
 - `GET /api/pembayaran`
 - `GET /api/pembayaran/{id}`
+- `PUT /api/pembayaran/{id}`
 - `GET /api/peminjaman/{id}/pembayaran`
 - `DELETE /api/pembayaran/{id}`
 

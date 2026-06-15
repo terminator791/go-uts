@@ -16,6 +16,7 @@ type PembayaranRepository interface {
 	GetAll(ctx context.Context) ([]domain.Pembayaran, error)
 	GetByID(ctx context.Context, id int64) (domain.Pembayaran, error)
 	GetByPeminjamanID(ctx context.Context, peminjamanID int64) ([]domain.Pembayaran, error)
+	Update(ctx context.Context, id int64, data domain.Pembayaran) (domain.Pembayaran, error)
 	Delete(ctx context.Context, id int64) (domain.Pembayaran, error)
 	SumByPeminjamanID(ctx context.Context, peminjamanID int64) (int64, error)
 }
@@ -129,6 +130,33 @@ func (r *PembayaranPGX) GetByPeminjamanID(ctx context.Context, peminjamanID int6
 	}
 
 	return result, rows.Err()
+}
+
+func (r *PembayaranPGX) Update(ctx context.Context, id int64, data domain.Pembayaran) (domain.Pembayaran, error) {
+	parsedDate, err := time.Parse(pembayaranDateLayout, data.TanggalPembayaran)
+	if err != nil {
+		return domain.Pembayaran{}, err
+	}
+
+	query := `
+		UPDATE pembayaran
+		SET id_peminjaman = $1, tanggal_pembayaran = $2, jumlah_pembayaran = $3
+		WHERE id = $4
+		RETURNING id, id_peminjaman, tanggal_pembayaran, jumlah_pembayaran
+	`
+
+	var updated domain.Pembayaran
+	var tanggal time.Time
+	row := r.pool.QueryRow(ctx, query, data.IDPeminjaman, parsedDate, data.JumlahPembayaran, id)
+	if err := row.Scan(&updated.ID, &updated.IDPeminjaman, &tanggal, &updated.JumlahPembayaran); err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			return updated, ErrNotFound
+		}
+		return updated, err
+	}
+	updated.TanggalPembayaran = tanggal.Format(pembayaranDateLayout)
+
+	return updated, nil
 }
 
 func (r *PembayaranPGX) Delete(ctx context.Context, id int64) (domain.Pembayaran, error) {
