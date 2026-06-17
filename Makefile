@@ -1,6 +1,7 @@
 APP_NAME=go-uts
+DOCKER_IMAGE=go-uts
 
-.PHONY: run build test migrate fresh seed
+.PHONY: run build test migrate fresh seed docker-build docker-run
 
 run:
 	go run ./cmd/server
@@ -19,3 +20,9 @@ fresh:
 
 seed:
 	go run ./cmd/seed
+
+docker-build:
+	docker build -t $(DOCKER_IMAGE):latest .
+
+docker-run:
+	docker run -p 8080:8080 $(DOCKER_IMAGE):latest
