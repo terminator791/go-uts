@@ -1,4 +1,4 @@
-APP_NAME=go-uts
+APP_NAME=go-uts2
 DOCKER_IMAGE=go-uts
 
 .PHONY: run build test migrate fresh seed docker-build docker-run
